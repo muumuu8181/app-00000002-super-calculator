@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Calculator - スタイリッシュ電卓</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-content">
+                <h1 class="app-title">
+                    <span class="title-icon">🔢</span>
+                    <span class="title-text">Super Calculator</span>
+                </h1>
+                <div class="theme-switcher">
+                    <button class="theme-btn" id="themeBtn" title="テーマ切り替え">🌙</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- 電卓本体 -->
+            <section class="calculator-section">
+                <div class="calculator">
+                    <!-- ディスプレイ -->
+                    <div class="display-container">
+                        <div class="history-display" id="historyDisplay"></div>
+                        <div class="main-display" id="mainDisplay">0</div>
+                    </div>
+
+                    <!-- ボタングリッド -->
+                    <div class="button-grid">
+                        <!-- 第1行 -->
+                        <button class="btn btn-secondary" data-action="clear">C</button>
+                        <button class="btn btn-secondary" data-action="clear-entry">CE</button>
+                        <button class="btn btn-secondary" data-action="backspace">⌫</button>
+                        <button class="btn btn-operator" data-operator="/">÷</button>
+
+                        <!-- 第2行 -->
+                        <button class="btn btn-number" data-number="7">7</button>
+                        <button class="btn btn-number" data-number="8">8</button>
+                        <button class="btn btn-number" data-number="9">9</button>
+                        <button class="btn btn-operator" data-operator="*">×</button>
+
+                        <!-- 第3行 -->
+                        <button class="btn btn-number" data-number="4">4</button>
+                        <button class="btn btn-number" data-number="5">5</button>
+                        <button class="btn btn-number" data-number="6">6</button>
+                        <button class="btn btn-operator" data-operator="-">-</button>
+
+                        <!-- 第4行 -->
+                        <button class="btn btn-number" data-number="1">1</button>
+                        <button class="btn btn-number" data-number="2">2</button>
+                        <button class="btn btn-number" data-number="3">3</button>
+                        <button class="btn btn-operator" data-operator="+">+</button>
+
+                        <!-- 第5行 -->
+                        <button class="btn btn-number btn-zero" data-number="0">0</button>
+                        <button class="btn btn-number" data-number=".">.</button>
+                        <button class="btn btn-equals" data-action="equals">=</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 履歴パネル -->
+            <section class="history-section">
+                <div class="history-header">
+                    <h2 class="section-title">
+                        <span class="title-icon">📚</span>
+                        計算履歴
+                    </h2>
+                    <div class="history-actions">
+                        <button class="btn-icon" id="exportBtn" title="CSV出力">
+                            📥
+                        </button>
+                        <button class="btn-icon" id="clearHistoryBtn" title="履歴クリア">
+                            🗑️
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="history-list" id="historyList">
+                    <div class="empty-state">
+                        <div class="empty-icon">📊</div>
+                        <div class="empty-text">計算履歴がありません</div>
+                        <div class="empty-subtext">計算を実行すると履歴が表示されます</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 機能パネル -->
+            <section class="features-section">
+                <div class="feature-grid">
+                    <!-- メモリ機能 -->
+                    <div class="feature-card">
+                        <h3 class="feature-title">メモリ機能</h3>
+                        <div class="memory-controls">
+                            <button class="btn btn-memory" data-memory="mc">MC</button>
+                            <button class="btn btn-memory" data-memory="mr">MR</button>
+                            <button class="btn btn-memory" data-memory="m+">M+</button>
+                            <button class="btn btn-memory" data-memory="m-">M-</button>
+                        </div>
+                        <div class="memory-display" id="memoryDisplay">M: 0</div>
+                    </div>
+
+                    <!-- 科学計算 -->
+                    <div class="feature-card">
+                        <h3 class="feature-title">科学計算</h3>
+                        <div class="scientific-controls">
+                            <button class="btn btn-scientific" data-function="sqrt">√</button>
+                            <button class="btn btn-scientific" data-function="square">x²</button>
+                            <button class="btn btn-scientific" data-function="percent">%</button>
+                            <button class="btn btn-scientific" data-function="negate">±</button>
+                        </div>
+                    </div>
+
+                    <!-- 統計情報 -->
+                    <div class="feature-card">
+                        <h3 class="feature-title">統計情報</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-label">計算回数</span>
+                                <span class="stat-value" id="calcCount">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">最大値</span>
+                                <span class="stat-value" id="maxValue">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">最小値</span>
+                                <span class="stat-value" id="minValue">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">平均値</span>
+                                <span class="stat-value" id="avgValue">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- キーボードヘルプモーダル -->
+        <div class="modal" id="helpModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">キーボードショートカット</h3>
+                    <button class="modal-close" id="closeModal">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div class="shortcut-grid">
+                        <div class="shortcut-item">
+                            <kbd>0-9</kbd>
+                            <span>数字入力</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>+</kbd>
+                            <span>足し算</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>-</kbd>
+                            <span>引き算</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>*</kbd>
+                            <span>掛け算</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>/</kbd>
+                            <span>割り算</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>Enter</kbd>
+                            <span>計算実行</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>Escape</kbd>
+                            <span>クリア</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <kbd>Backspace</kbd>
+                            <span>一文字削除</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- フローティングアクションボタン -->
+        <div class="fab-container">
+            <button class="fab" id="helpBtn" title="ヘルプ">
+                ❓
+            </button>
+        </div>
+
+        <!-- 計算エフェクト -->
+        <div class="effect-container" id="effectContainer"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
